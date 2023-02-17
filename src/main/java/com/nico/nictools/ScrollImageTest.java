@@ -19,6 +19,7 @@ import java.io.IOException;
 public class ScrollImageTest extends JPanel {
 
     private static final long serialVersionUID = 1L;
+    public static final int TABLE_SIZE = 7428;
     private JScrollPane sp;
     int nbImageCaps = 17;
     int currentCaps = 2;
@@ -130,7 +131,7 @@ public class ScrollImageTest extends JPanel {
     public void testTableMultipleCircles() throws Exception {
         int nbTotalCaps = 0;
         // 130px = 1/2 caps // 260 = une caps
-        int TABLE_SIZE = 7428;
+        int TABLE_SIZE = ScrollImageTest.TABLE_SIZE;
 //        int TABLE_SIZE = 10000;
         int TABLE_SIZE_HALF = TABLE_SIZE / 2;
         BufferedImage table = new BufferedImage(TABLE_SIZE, TABLE_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -139,9 +140,10 @@ public class ScrollImageTest extends JPanel {
         g.setColor(new Color(236, 218, 135));
         g.fillOval(0, 0, TABLE_SIZE, TABLE_SIZE);
         /// INIT VARS
-        addCapsFromCenter(TABLE_SIZE_HALF, TABLE_SIZE_HALF, g, caps);
+//        addCapsFromCenter(TABLE_SIZE_HALF, TABLE_SIZE_HALF, g, caps);
+//        double circleDistanceFromCenter = TABLE_SIZE_HALF - 130 + 260;
         double circleDistanceFromCenter = TABLE_SIZE_HALF - 130 + 260;
-        for (int c = 0; c < 11; c++) {
+        for (int c = 0; c < 14; c++) {
             circleDistanceFromCenter = circleDistanceFromCenter - 260;
 
             int x1 = TABLE_SIZE_HALF + (int) circleDistanceFromCenter;
