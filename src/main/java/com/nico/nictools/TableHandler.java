@@ -33,7 +33,7 @@ public class TableHandler {
     public TableHandler( JPanel canvas ) throws IOException {
         this.canvas = canvas;
         capsules = new ArrayList<>();
-        background = ImageIO.read( new File( "/home/nico/IdeaProjects/TableGenerator/background.png" ) );
+        background = ImageIO.read( Thread.currentThread().getContextClassLoader().getResource( "backg/background.png" ) );
 //         = image.getScaledInstance( image.getWidth() / 8, image.getHeight() / 8, Image.SCALE_SMOOTH );
         background.getGraphics().setColor( Color.black );
 

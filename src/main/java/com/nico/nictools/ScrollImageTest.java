@@ -17,168 +17,172 @@ import java.io.IOException;
  */
 
 public class ScrollImageTest extends JPanel {
+
     private static final long serialVersionUID = 1L;
     private JScrollPane sp;
     int nbImageCaps = 17;
     int currentCaps = 2;
     TableHandler tableHandler;
 
-    public static void main( String[] args ) {
-        SwingUtilities.invokeLater( new Runnable() {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run( ) {
+            public void run() {
                 try {
                     JPanel p = null;
                     p = new ScrollImageTest();
                     JFrame f = new JFrame();
-                    f.setContentPane( p );
-                    f.setSize( 400, 300 );
-                    f.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-                    f.setVisible( true );
-                } catch( Exception e ) {
+                    f.setContentPane(p);
+                    f.setSize(400, 400);
+                    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    f.setVisible(true);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        } );
+        });
     }
 
-    public ScrollImageTest( ) throws IOException {
+    public ScrollImageTest() throws IOException {
         JPanel canvas = new JPanel() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void paintComponent( Graphics g ) {
-                super.paintComponent( g );
-                g.drawImage( tableHandler.getImage(), 0, 0, null );
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(tableHandler.getImage(), 0, 0, null);
             }
         };
-        tableHandler = new TableHandler( canvas );
-        tableHandler.loadCaps( new File( Thread.currentThread().getContextClassLoader().getResource( "1664.png" ).getPath() ).getParent() );
+        tableHandler = new TableHandler(canvas);
+        tableHandler.loadCaps(new File(Thread.currentThread().getContextClassLoader().getResource("1664.png").getPath()).getParent());
 
         try {
             testTableMultipleCircles();
-        } catch( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        canvas.setFocusable( true );
+        canvas.setFocusable(true);
         canvas.requestFocusInWindow();
 
-        canvas.addKeyListener( new KeyListener() {
+        canvas.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped( KeyEvent keyEvent ) {
+            public void keyTyped(KeyEvent keyEvent) {
 
             }
 
             @Override
-            public void keyPressed( KeyEvent keyEvent ) {
-                tableHandler.keyPressed( keyEvent );
+            public void keyPressed(KeyEvent keyEvent) {
+                tableHandler.keyPressed(keyEvent);
             }
 
             //  940, 174,
             @Override
-            public void keyReleased( KeyEvent keyEvent ) {
+            public void keyReleased(KeyEvent keyEvent) {
 
             }
-        } );
+        });
 
-        canvas.addMouseListener( new MouseListener() {
+        canvas.addMouseListener(new MouseListener() {
             @Override
-            public void mouseClicked( MouseEvent mouseEvent ) {
+            public void mouseClicked(MouseEvent mouseEvent) {
                 int xA = mouseEvent.getX();
                 int yA = mouseEvent.getY();
-                tableHandler.clickAt( xA, yA );
+                tableHandler.clickAt(xA, yA);
             }
 
             @Override
-            public void mousePressed( MouseEvent mouseEvent ) {
-
-            }
-
-            @Override
-            public void mouseReleased( MouseEvent mouseEvent ) {
+            public void mousePressed(MouseEvent mouseEvent) {
 
             }
 
             @Override
-            public void mouseEntered( MouseEvent mouseEvent ) {
+            public void mouseReleased(MouseEvent mouseEvent) {
 
             }
 
             @Override
-            public void mouseExited( MouseEvent mouseEvent ) {
+            public void mouseEntered(MouseEvent mouseEvent) {
 
             }
-        } );
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+            }
+        });
 
 //        addCapsFromCenter( , , (Graphics2D) image.getGraphics(), caps2 );
 
 
 //        canvas.add( new JButton( "Currently I do nothing" ) );
-        canvas.setPreferredSize( new Dimension( tableHandler.background.getWidth( null ), tableHandler.background.getHeight( null ) ) );
-        sp = new JScrollPane( canvas );
-        setLayout( new BorderLayout() );
-        add( sp, BorderLayout.CENTER );
+        canvas.setPreferredSize(new Dimension(tableHandler.background.getWidth(null), tableHandler.background.getHeight(null)));
+        sp = new JScrollPane(canvas);
+        setLayout(new BorderLayout());
+        add(sp, BorderLayout.CENTER);
         tableHandler.printCaps();
         tableHandler.printCurrentCaps();
         tableHandler.printAvailableCaps();
     }
 
 
-    public void testTableMultipleCircles( ) throws Exception {
+    public void testTableMultipleCircles() throws Exception {
         int nbTotalCaps = 0;
         // 130px = 1/2 caps // 260 = une caps
-        BufferedImage table = new BufferedImage( 5530, 5530, BufferedImage.TYPE_INT_ARGB );
-        BufferedImage caps = ImageIO.read( Thread.currentThread().getContextClassLoader().getResource( "1664.png" ) );
+        int TABLE_SIZE = 7428;
+//        int TABLE_SIZE = 10000;
+        int TABLE_SIZE_HALF = TABLE_SIZE / 2;
+        BufferedImage table = new BufferedImage(TABLE_SIZE, TABLE_SIZE, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage caps = ImageIO.read(Thread.currentThread().getContextClassLoader().getResource("1664.png"));
         Graphics2D g = table.createGraphics();
-        g.setColor( new Color( 236, 218, 135 ) );
-        g.fillOval( 0, 0, 5530, 5530 );
+        g.setColor(new Color(236, 218, 135));
+        g.fillOval(0, 0, TABLE_SIZE, TABLE_SIZE);
         /// INIT VARS
-        double circleDistanceFromCenter = 2765.0 - 130 + 260;
-        addCapsFromCenter( 2765, 2765, g, caps );
-        for( int c = 0; c < 11; c++ ) {
+        addCapsFromCenter(TABLE_SIZE_HALF, TABLE_SIZE_HALF, g, caps);
+        double circleDistanceFromCenter = TABLE_SIZE_HALF - 130 + 260;
+        for (int c = 0; c < 11; c++) {
             circleDistanceFromCenter = circleDistanceFromCenter - 260;
 
-            int x1 = 2765 + (int) circleDistanceFromCenter;
-            int y1 = 2765;
+            int x1 = TABLE_SIZE_HALF + (int) circleDistanceFromCenter;
+            int y1 = TABLE_SIZE_HALF;
 //            if( c % 2 == 1 ) {
 //                double perimeter = 2 * Math.PI * circleDistanceFromCenter;
 //                double angle = ( 130 * ( 360.0 * Math.PI / 180.0 ) ) / perimeter;
-//                double x1bis = ( x1 - 2765.0 ) * Math.cos( angle ) - ( y1 - 2765.0 ) * Math.sin( angle );
+//                double x1bis = ( x1 - TABLE_SIZE_HALF ) * Math.cos( angle ) - ( y1 - TABLE_SIZE_HALF ) * Math.sin( angle );
 //                x1 = (int) ( x1bis + 2765 );
-//                double y1bis = ( x1 - 2765.0 ) * Math.sin( angle ) + ( y1 - 2765.0 ) * Math.cos( angle );
+//                double y1bis = ( x1 - TABLE_SIZE_HALF ) * Math.sin( angle ) + ( y1 - TABLE_SIZE_HALF ) * Math.cos( angle );
 //                y1 = (int) ( y1bis + 2765 );
 //            }
 //            addCapsFromCenter( x1, y1, g, caps );
             double circlePerimeter = 2 * Math.PI * circleDistanceFromCenter;
-            int nbCaps = (int) ( circlePerimeter / 260.0 );
-            if( nbCaps % 2 == 1 ) {
+            int nbCaps = (int) (circlePerimeter / 260.0);
+            if (nbCaps % 2 == 1) {
                 nbCaps--;
             }
             nbTotalCaps += nbCaps;
-            double reste = circlePerimeter - ( nbCaps * 260 );
-            System.out.println( nbCaps + " reste " + reste );
-            double distBetweenCaps = 260.0 + ( reste / nbCaps );
-            double angle = ( distBetweenCaps * ( 360.0 * Math.PI / 180.0 ) ) / circlePerimeter;
+            double reste = circlePerimeter - (nbCaps * 260);
+            System.out.println(nbCaps + " reste " + reste);
+            double distBetweenCaps = 260.0 + (reste / nbCaps);
+            double angle = (distBetweenCaps * (360.0 * Math.PI / 180.0)) / circlePerimeter;
 
             int x2 = x1;
             int y2 = y1;
             double adjustX = 0.0;
             double adjustY = 0.0;
-            for( int i = 0; i < nbCaps; i++ ) {
-                addCapsFromCenter( x2, y2, g, caps );
-                double v1 = ( x1 - 2765.0 ) * Math.cos( angle ) - ( y1 - 2765.0 ) * Math.sin( angle );
-                x2 = (int) ( v1 + 2765 );
-                adjustX += v1 - ( new Double( x2 ).doubleValue() );
-                if( adjustX > 1.0 ) {
+            for (int i = 0; i < nbCaps; i++) {
+                addCapsFromCenter(x2, y2, g, caps);
+                double v1 = (x1 - TABLE_SIZE_HALF) * Math.cos(angle) - (y1 - TABLE_SIZE_HALF) * Math.sin(angle);
+                x2 = (int) (v1 + TABLE_SIZE_HALF);
+                adjustX += v1 - (new Double(x2).doubleValue());
+                if (adjustX > 1.0) {
                     x2 += (int) adjustX;
                     adjustX -= (int) adjustX;
                 }
-                double v2 = ( x1 - 2765.0 ) * Math.sin( angle ) + ( y1 - 2765.0 ) * Math.cos( angle );
-                y2 = (int) ( v2 + 2765 );
-                adjustY += v2 - ( new Double( y2 ).doubleValue() );
-                if( adjustY > 1.0 ) {
+                double v2 = (x1 - TABLE_SIZE_HALF) * Math.sin(angle) + (y1 - TABLE_SIZE_HALF) * Math.cos(angle);
+                y2 = (int) (v2 + TABLE_SIZE_HALF);
+                adjustY += v2 - (new Double(y2).doubleValue());
+                if (adjustY > 1.0) {
                     y2 += (int) adjustY;
                     adjustY -= (int) adjustY;
                 }
@@ -193,23 +197,23 @@ public class ScrollImageTest extends JPanel {
 
         try {
             // retrieve image
-            File outputfile = new File( "saved.png" );
-            ImageIO.write( table, "png", outputfile );
-        } catch( IOException e ) {
+            File outputfile = new File("saved.png");
+            ImageIO.write(table, "png", outputfile);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println( "Total caps: " + nbTotalCaps );
-        System.out.println( "running swing GUI" );
+        System.out.println("Total caps: " + nbTotalCaps);
+        System.out.println("running swing GUI");
 
     }
 
 
-    public void addCapsFromCenter( int centerX, int centerY, Graphics2D table, BufferedImage caps ) {
+    public void addCapsFromCenter(int centerX, int centerY, Graphics2D table, BufferedImage caps) {
 //        table.drawImage( caps, centerX - 130, centerY - 130, null );
-        centerX = ( centerX - 130 ) / 8;
-        centerY = ( centerY - 130 ) / 8;
-        tableHandler.posCaps.add( new PosCaps( centerX, centerY, 0 ) );
-        tableHandler.allPos.add( new PosCaps( centerX, centerY, 0 ) );
+        centerX = (centerX - 130) / 8;
+        centerY = (centerY - 130) / 8;
+        tableHandler.posCaps.add(new PosCaps(centerX, centerY, 0));
+        tableHandler.allPos.add(new PosCaps(centerX, centerY, 0));
     }
 
 }
